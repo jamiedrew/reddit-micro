@@ -1,0 +1,23 @@
+h1 {
+    text-align: center;
+}
+
+h1 span {
+    color:	MediumSlateBlue;
+}
+
+img {
+    display: block;
+    margin: 0% auto;
+    height: 75px;
+}
+
+@media only screen and (max-width: 768px) {
+    #header {
+        margin: 7% auto;
+    }
+
+    h1 {
+        display: none;
+    }
+}
