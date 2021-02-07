@@ -1,6 +1,8 @@
-import './Post.css';
+import './FullPost.css';
+import { Link } from 'react-router-dom';
 
-function Post(props) {
+
+export const FullPost = (props) => {
     
     let media;
     if (props.imgurl) {
@@ -22,5 +24,3 @@ function Post(props) {
         </div>
     )
 }
-
-export default Post;

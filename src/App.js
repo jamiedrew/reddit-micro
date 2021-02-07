@@ -1,25 +1,37 @@
-import './App.css';
+import {
+  Switch,
+  Route,
+  NavLink,
+  Redirect
+} from 'react-router-dom';
 
-import Header from './Components/Header/Header.js';
-import Home from './Components/Home/Home.js';
-import SearchBar from './Components/SearchBar/SearchBar.js';
+import './App.css';
+import { PostList } from './Components/PostList/PostList.js';
+
+import headerImg from './reddit.png';
 
 function App() {
-
 
   return (
     <div className="App">
 
       <header>
-        <Header />
+        <NavLink to={`/`}>
+          <img src={headerImg} alt=""></img>
+          <h1>Reddit<span>Micro</span></h1>
+        </NavLink>
       </header>
 
       <div id="searchbar">
-        <SearchBar />
-      </div>
+            <label htmlFor="redditsearch">Search Reddit: </label>
+            <form className="search">
+                <input type="search" id="redditsearch" name="redditsearch" placeholder="Search Reddit" required></input>
+                <button type="submit">Go</button>
+            </form>
+        </div>
 
       <main>
-        <Home />
+        <PostList />
       </main>
 
     </div>

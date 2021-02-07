@@ -8,10 +8,110 @@ body {
 
 h1 {
     font-family: 'Ubuntu', sans-serif;
+    text-align: center;
+}
+
+h1 span {
+    color:	MediumSlateBlue;
+}
+
+header img {
+    display: block;
+    margin: 0% auto;
+    height: 75px;
+}
+
+header a {
+    text-decoration: none;
+    color: black;
+}
+
+#post-list {
+    width: 66%;
+    margin: 5% auto;
+}
+
+h2 {
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 1.4em;
+    font-weight: 600;
+}
+
+.post-preview {
+    border: 1px solid mediumslateblue;
+    margin: 1% auto;
+    padding: 3% 5%;
+}
+
+.post-preview .post-info {
+    display: flex;
+    justify-content: space-between;
+}
+
+.score {
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 700;
+    color: mediumslateblue;
+}
+
+.subreddit {
+    color: cornflowerblue;
+}
+
+#searchbar {
+    text-align: center;
+    margin: 2%;
+}
+
+.search {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+.search input[type=search] {
+    padding: 8px 14px;
+    border: 0px solid;
+    background: gainsboro;
+}
+
+#searchbar label {
+    display: none;
+}
+
+#searchbar button {
+    background-color: MediumSlateBlue;
+    border: 2px solid MediumSlateBlue;
+    color: white;
+    position: relative;
+    left: -8px;
+    padding: 6px 12px;
+}
+
+#searchbar button:hover {
+    background-color: cornflowerblue;
+    border: 2px solid cornflowerblue;
 }
 
 @media only screen and (max-width: 768px) {
+    header {
+        margin: 7% auto;
+    }
+
     body {
         width: 100%;
+    }
+
+    #searchbar {
+        width: 100%;
+        margin: auto;
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    #post-list {
+        width: 95%;
+        margin: 5% auto;
     }
 }
