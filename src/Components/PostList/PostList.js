@@ -3,21 +3,37 @@ import {useDispatch, useSelector} from "react-redux";
 import {Link} from "react-router-dom";
 import _ from 'lodash';
 import { GetRedditPosts } from '../../Actions/GetRedditPosts';
-import {PostPreview} from './PostPreview';
+import PostPreview from './PostPreview';
+import {RedditSort, SubredditInfo} from './PostListHeader'
+import { GetSubredditInfo } from '../../Actions/GetSubredditInfo';
 
 export const PostList = (props) => {
-    const [posts, setPosts] = useState([]);
+
+    let subredditName = props.match.params.subreddit;
+    
     const dispatch = useDispatch();
-    const postList = useSelector(store => store.PostList);
 
     const fetchData = () => {
-        dispatch(GetRedditPosts());
+        if (subredditName !== null) {
+            dispatch(GetSubredditInfo(subredditName));
+            dispatch(GetRedditPosts(subredditName));
+        }
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         fetchData();
-        console.log(postList);
-    }, [])
+        
+        window.scroll({
+            top: 0,
+            bottom: 0,
+            behavior: "smooth"
+        });
+        // console.log("subreddit info:")
+        // console.log(subredditInfo);
+    }, [subredditName])
+
+    const postList = useSelector(store => store.PostList);
+    const subredditInfo = useSelector(store => store.Subreddits);
 
     const ShowData = () => {
         if (!_.isEmpty(postList.data)) {
@@ -33,9 +49,20 @@ export const PostList = (props) => {
         }
     }
 
+    if (postList.loading) {
+        return <p>loading...</p>
+    }
+
+    if (postList.errorMsg !== ``) {
+        return <p>{postList.errorMsg}</p>
+    }
+
     return (
-        <div id="post-list">
-            {ShowData()}
+        <div>
+            <div id="post-list">
+                { subredditName ? <SubredditInfo information={subredditInfo.data} /> : <RedditSort /> }
+                {ShowData()}
+            </div>
         </div>
     )
 };

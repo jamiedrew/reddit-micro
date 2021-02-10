@@ -1,8 +1,14 @@
-import {Link} from 'react-router-dom';
+import {Link, NavLink, withRouter, useParams} from 'react-router-dom';
+import ReactMarkdown from 'react-markdown';
 
-export const PostPreview = (props) => {
+const PostPreview = (props) => {
 
     const post = props.postData;
+    let media, thumb = post.thumbnail;
+
+    if (post.thumbnail !== null) {
+        media = <img src={post.url} alt="" />
+    }
 
     const intToString = (num) => {
         if (num < 1000) {
@@ -25,15 +31,42 @@ export const PostPreview = (props) => {
         return (num / si[i].v).toFixed(2).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + si[i].s;
     }
 
+    const bodyTextPreview = <span><ReactMarkdown>{post.selftext.substr(0, 275) + "..."}</ReactMarkdown></span>;
+
+    const scrollToTop = () => {
+        window.scroll({
+            top: 0,
+            bottom: 0,
+            behavior: "smooth"
+        })
+    }
+
     return (
         <div className="post-preview">
-            <h2>{post.title}</h2>
-            <div className="post-info">
-                <span className="subreddit">{post.subreddit}</span>
-                <span className="score">{intToString(post.score)}</span>
+
+            {media}
+            
+            <div className="post-title">
+                { post.is_self ? <h2>{post.title}</h2> : <a href={post.url}><h2>{post.title}</h2></a> }
+            </div>
+
+            <span className="subreddit">
+                <Link to={`/r/${post.subreddit}/`} onClick={scrollToTop} >{post.subreddit}</Link>
+            </span>
+
+            <div className="post-body-preview">
+                <p>{post.selftext ? bodyTextPreview : null}</p>
+                <div className="comments-score">
+                    <Link to={`/discussion/${post.id}`}>
+                        <h4>{intToString(post.num_comments)} comments</h4>
+                    </Link>
+                    <span className="score">{intToString(post.score)}</span>
+                </div>
             </div>
             
         </div>
     )
     
 }
+
+export default withRouter(PostPreview)

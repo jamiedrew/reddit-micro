@@ -2,11 +2,13 @@ import {
   Switch,
   Route,
   NavLink,
-  Redirect
+  withRouter
 } from 'react-router-dom';
+import {useEffect} from 'react'
 
 import './App.css';
 import { PostList } from './Components/PostList/PostList.js';
+import {FullPost} from './Components/FullPost'
 
 import headerImg from './reddit.png';
 
@@ -31,11 +33,15 @@ function App() {
         </div>
 
       <main>
-        <PostList />
+        <Switch>
+          <Route exact path="/discussion/:post" component={FullPost} />
+          <Route exact path="/r/:subreddit/" component={PostList} />
+          <Route exact path="/:sort" component={PostList} />
+          <Route exact path="/" component={PostList} />
+        </Switch>
       </main>
-
     </div>
   );
 }
 
-export default App;
+export default withRouter(App);

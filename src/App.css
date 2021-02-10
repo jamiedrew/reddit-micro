@@ -41,10 +41,29 @@ h2 {
     border: 1px solid mediumslateblue;
     margin: 1% auto;
     padding: 3% 5%;
+    max-width: 750px;
+}
+
+.post-preview .post-title {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
 
 .post-preview .post-info {
     display: flex;
+    justify-content: space-between;
+}
+
+.post-preview img {
+    width: 100%;
+    height: auto;
+    margin: 2% auto;
+}
+
+.comments-score {
+    display: flex;
+    align-items: baseline;
     justify-content: space-between;
 }
 
@@ -92,9 +111,37 @@ h2 {
     border: 2px solid cornflowerblue;
 }
 
+.full-post {
+    width: 80%;
+    max-width: 750px;
+    margin: auto;
+    padding: 5%;
+    border: 1px solid cornflowerblue;
+}
+
+.full-post img {
+    width: 100%;
+    height: auto;
+}
+
+.comment-container {
+    width: 66%;
+    margin: 5% auto;
+}
+
+.comment-container .comment {
+    border: 1px solid mediumslateblue;
+    margin: 1% auto;
+    padding: 2% 5%;
+}
+
 @media only screen and (max-width: 768px) {
     header {
         margin: 7% auto;
+    }
+
+    header h1 {
+        display: none;
     }
 
     body {
@@ -113,5 +160,15 @@ h2 {
     #post-list {
         width: 95%;
         margin: 5% auto;
+    }
+
+    .full-post {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .comment-container {
+        width: 95%;
+        margin: 1% auto;
     }
 }
