@@ -2,14 +2,13 @@ import {
   Switch,
   Route,
   NavLink,
-  withRouter
+  withRouter,
 } from 'react-router-dom';
-import {useEffect} from 'react'
-
 import './App.css';
 import { PostList } from './Components/PostList/PostList.js';
 import {FullPost} from './Components/FullPost'
-
+import {SearchList} from './Components/Search/SearchList';
+import {SearchBar} from './Components/SearchBar';
 import headerImg from './reddit.png';
 
 function App() {
@@ -24,18 +23,13 @@ function App() {
         </NavLink>
       </header>
 
-      <div id="searchbar">
-            <label htmlFor="redditsearch">Search Reddit: </label>
-            <form className="search">
-                <input type="search" id="redditsearch" name="redditsearch" placeholder="Search Reddit" required></input>
-                <button type="submit">Go</button>
-            </form>
-        </div>
+      <SearchBar />
 
       <main>
         <Switch>
           <Route exact path="/discussion/:post" component={FullPost} />
           <Route exact path="/r/:subreddit/" component={PostList} />
+          <Route exact path="/search/:searchTerm" component={SearchList} />
           <Route exact path="/:sort" component={PostList} />
           <Route exact path="/" component={PostList} />
         </Switch>

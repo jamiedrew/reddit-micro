@@ -47,7 +47,7 @@ const PostPreview = (props) => {
             {media}
             
             <div className="post-title">
-                { post.is_self ? <h2>{post.title}</h2> : <a href={post.url}><h2>{post.title}</h2></a> }
+                { post.is_self ? <h2><ReactMarkdown>{post.title}</ReactMarkdown></h2> : <a href={post.url}><h2><ReactMarkdown>{post.title}</ReactMarkdown></h2></a> }
             </div>
 
             <span className="subreddit">

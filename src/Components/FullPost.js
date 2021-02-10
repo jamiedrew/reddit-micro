@@ -40,7 +40,7 @@ export const FullPost = (props) => {
             return (
                 <div className="full-post">
                     { post.thumbnail ? <img src={post.url} alt="" /> : null }
-                    { post.is_self ? <h1>{post.title}</h1> : <h1><a href={post.url}>{post.title}</a></h1> }
+                    { post.is_self ? <h1><ReactMarkdown>{post.title}</ReactMarkdown></h1> : <h1><a href={post.url}><ReactMarkdown>{post.title}</ReactMarkdown></a></h1> }
                     { post.is_self ? null : <span className="post-link">{post.url}</span> }
                     <h2>{post.author}</h2>
                     <h3>{post.subreddit_name_prefixed}</h3>

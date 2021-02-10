@@ -3,7 +3,6 @@ import React from 'react';
 export const RedditSort = (props) => {
     return (
         <div id="reddit-sorting">
-            <h1>Sorting options</h1>
         </div>
     )
 }

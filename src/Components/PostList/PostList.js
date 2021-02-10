@@ -28,8 +28,7 @@ export const PostList = (props) => {
             bottom: 0,
             behavior: "smooth"
         });
-        // console.log("subreddit info:")
-        // console.log(subredditInfo);
+        
     }, [subredditName])
 
     const postList = useSelector(store => store.PostList);
