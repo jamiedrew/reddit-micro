@@ -3,12 +3,14 @@ import {
   Route,
   NavLink,
   withRouter,
+  Redirect
 } from 'react-router-dom';
 import './App.css';
 import { PostList } from './Components/PostList/PostList.js';
 import {FullPost} from './Components/FullPost'
 import {SearchList} from './Components/Search/SearchList';
 import {SearchBar} from './Components/SearchBar';
+import {Sidebar} from './Components/Sidebar';
 import headerImg from './reddit.png';
 
 function App() {
@@ -27,10 +29,11 @@ function App() {
 
       <main>
         <Switch>
+          <Route exact path="/:sort" component={PostList} />
           <Route exact path="/discussion/:post" component={FullPost} />
           <Route exact path="/r/:subreddit/" component={PostList} />
           <Route exact path="/search/:searchTerm" component={SearchList} />
-          <Route exact path="/:sort" component={PostList} />
+          <Redirect from="/" to="/best" component={PostList} />
           <Route exact path="/" component={PostList} />
         </Switch>
       </main>

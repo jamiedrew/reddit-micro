@@ -45,9 +45,6 @@ h2 {
 }
 
 .post-preview .post-title {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
 }
 
 .post-preview .post-info {

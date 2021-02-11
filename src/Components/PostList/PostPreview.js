@@ -1,13 +1,30 @@
-import {Link, NavLink, withRouter, useParams} from 'react-router-dom';
+import {Link} from 'react-router-dom';
+import ReactPlayer from 'react-player';
 import ReactMarkdown from 'react-markdown';
-
 const PostPreview = (props) => {
 
     const post = props.postData;
-    let media, thumb = post.thumbnail;
+    let image, video, thumbnail = post.thumbnail;
 
-    if (post.thumbnail !== null) {
-        media = <img src={post.url} alt="" />
+    if (thumbnail) {
+        image = <img src={post.url} alt="" />
+
+        if (image) {
+            thumbnail = null;
+        }
+
+    }
+
+    if (post.media) {
+        if (post.media.reddit_video) {
+            video = <video controls width="100%"><source src={post.media.reddit_video.fallback_url} /></video>
+        } else if (post.domain.match(/yout/)) {
+            video = <ReactPlayer url={post.url} controls width="100%" />
+        } else if (post.domain.match(/vimeo/)) {
+            video = <ReactPlayer url={post.url} controls width="100%" />
+        } else {
+            thumbnail = <img src={post.thumbnail} alt="" />
+        }
     }
 
     const intToString = (num) => {
@@ -42,11 +59,15 @@ const PostPreview = (props) => {
     }
 
     return (
+        
         <div className="post-preview">
 
-            {media}
+            {image ? image : null}
+            {video ? video : null}
             
             <div className="post-title">
+                { thumbnail ? thumbnail : null }
+                { post.stickied ? <div className="sticky">sticky</div> : null }
                 { post.is_self ? <h2><ReactMarkdown>{post.title}</ReactMarkdown></h2> : <a href={post.url}><h2><ReactMarkdown>{post.title}</ReactMarkdown></h2></a> }
             </div>
 
@@ -55,7 +76,8 @@ const PostPreview = (props) => {
             </span>
 
             <div className="post-body-preview">
-                <p>{post.selftext ? bodyTextPreview : null}</p>
+                { post.is_self ? null : <div className="domain">{post.domain}</div> }
+                <div className="body">{post.selftext ? bodyTextPreview : null}</div>
                 <div className="comments-score">
                     <Link to={`/discussion/${post.id}`}>
                         <h4>{intToString(post.num_comments)} comments</h4>
@@ -69,4 +91,4 @@ const PostPreview = (props) => {
     
 }
 
-export default withRouter(PostPreview)
+export default PostPreview;

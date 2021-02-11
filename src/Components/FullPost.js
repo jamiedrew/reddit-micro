@@ -3,6 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {GetComments} from '../Actions/GetComments'
 import _ from 'lodash';
 import {Comment} from "./Comment";
+import ReactPlayer from 'react-player';
 import ReactMarkdown from 'react-markdown';
 
 export const FullPost = (props) => {
@@ -10,8 +11,7 @@ export const FullPost = (props) => {
     const postID = props.match.params.post;
     const dispatch = useDispatch();
 
-    let post;
-    let comments;
+    let post, video, comments;
 
     const fetchData = () => {
         dispatch(GetComments(postID))
@@ -37,8 +37,20 @@ export const FullPost = (props) => {
 
     const ShowPost = () => {
         if (!_.isEmpty(post)) {
+
+            if (post.media) {
+                if (post.media.reddit_video) {
+                    video = <video controls width="100%"><source src={post.media.reddit_video.fallback_url} /></video>
+                } else if (post.domain.match(/yout/)) {
+                    video = <ReactPlayer url={post.url} controls width="100%" />
+                } else if (post.domain.match(/vimeo/)) {
+                    video = <ReactPlayer url={post.url} controls width="100%" />
+                }
+            }
+
             return (
                 <div className="full-post">
+                    {video ? video : null}
                     { post.thumbnail ? <img src={post.url} alt="" /> : null }
                     { post.is_self ? <h1><ReactMarkdown>{post.title}</ReactMarkdown></h1> : <h1><a href={post.url}><ReactMarkdown>{post.title}</ReactMarkdown></a></h1> }
                     { post.is_self ? null : <span className="post-link">{post.url}</span> }
