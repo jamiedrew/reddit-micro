@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {Link} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 import _ from 'lodash';
+import {scrollToTop} from '../../App';
 import { GetRedditPosts, GetSortedPosts } from '../../Actions/GetRedditPosts';
 import PostPreview from './PostPreview';
 import {RedditSort, SubredditInfo} from './PostListHeader'
@@ -37,13 +38,8 @@ export const PostList = (props) => {
 
     useEffect(() => {
         fetchData();
-        
-        window.scroll({
-            top: 0,
-            bottom: 0,
-            behavior: "smooth"
-        });
-        
+        scrollToTop();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [subredditName, sortingBy])
 
     const postList = useSelector(store => store.PostList);
@@ -82,15 +78,15 @@ export const PostList = (props) => {
         
     }
 
-    if (postList.loading) {
+    if (postList.loading || sortedList.loading) {
         return (
-            <p>Loading posts...</p>
+            <div className="loading">Loading posts...</div>
         )
         
     }
 
-    if (postList.errorMsg !== ``) {
-        return <p>{postList.errorMsg}</p>
+    if (postList.errorMsg !== `` || sortedList.errorMsg !== ``) {
+        return <Redirect to="/404" />
     }
 
     return (

@@ -1,6 +1,5 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from "react-redux";
-import {useParams} from 'react-router-dom';
 import _ from 'lodash';
 import {GetSearchResults} from '../../Actions/GetSearchResults';
 import {SearchResult} from './SearchResult';
@@ -10,14 +9,10 @@ export const SearchList = (props) => {
     let searchTerm = props.match.params.searchTerm;
     const dispatch = useDispatch();
 
-    const fetchData = () => {
+    useEffect(() => {
         if (searchTerm !== null) {
             dispatch(GetSearchResults(searchTerm));
         }
-    }
-
-    useEffect(() => {
-        fetchData();
 
         window.scroll({
             top: 0,
@@ -25,6 +20,7 @@ export const SearchList = (props) => {
             behavior: "smooth"
         });
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchTerm])
     
     const searchResults = useSelector(store => store.Search);
@@ -43,13 +39,16 @@ export const SearchList = (props) => {
     }
 
     if (searchResults.loading) {
-        return <p>Searching Reddit for "{searchTerm}"...</p>
+        return <div className="searching">Searching Reddit for <span id="search-term">{searchTerm}</span>...</div>
     }
 
     if (searchResults.errorMsg !== ``) {
-        return <p>{searchResults.errorMsg}</p>
+        return <div className="error-message">{searchResults.errorMsg}</div>
     }
 
+    if (!searchResults.loading && _.isEmpty(searchResults.data)) {
+        return <div id="no-posts-found">Nothing found for <span id="search-term">{searchTerm}</span>.</div>
+    }
 
     return(
         <div className="search-results">

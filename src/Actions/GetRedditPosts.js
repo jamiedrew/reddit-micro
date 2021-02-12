@@ -7,6 +7,8 @@ export const GetRedditPosts = (subreddit) => async dispatch => {
         })
 
         const response = await axios.get(`https://www.reddit.com/r/${subreddit}.json`);
+        console.log("Full post data:");
+        console.log(response);
         let postsResponse = response.data.data;
         // console.log("Posts data:")
         // console.log(postsResponse);

@@ -1,4 +1,3 @@
-import _ from "lodash";
 import ReactMarkdown from 'react-markdown';
 
 export const Comment = (props) => {

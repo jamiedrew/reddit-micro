@@ -1,88 +1,98 @@
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import ReactPlayer from 'react-player';
 import ReactMarkdown from 'react-markdown';
+import {intToString, scrollToTop} from '../../App';
+import './PostPreview.css';
+
 const PostPreview = (props) => {
 
     const post = props.postData;
-    let image, video, thumbnail = post.thumbnail;
-
-    if (thumbnail) {
-        image = <img src={post.url} alt="" />
-
-        if (image) {
-            thumbnail = null;
-        }
-
-    }
+    let image, video, thumbnail, domain, nsfw = post.over_18;
 
     if (post.media) {
         if (post.media.reddit_video) {
             video = <video controls width="100%"><source src={post.media.reddit_video.fallback_url} /></video>
+            thumbnail = null;
         } else if (post.domain.match(/yout/)) {
             video = <ReactPlayer url={post.url} controls width="100%" />
+            thumbnail = null;
         } else if (post.domain.match(/vimeo/)) {
             video = <ReactPlayer url={post.url} controls width="100%" />
-        } else {
-            thumbnail = <img src={post.thumbnail} alt="" />
+            thumbnail = null;
         }
     }
 
-    const intToString = (num) => {
-        if (num < 1000) {
-            return num;
+    switch (post.thumbnail) {
+        case "self":
+            thumbnail = null;
+            break;
+        case "default":
+            thumbnail = null;
+            break;
+        case "spoiler":
+            thumbnail = null;
+            break;
+        case "":
+            thumbnail = null;
+            break;
+        case "nsfw":
+            thumbnail = null;
+            nsfw = true;
+            break;
+        default:
+            thumbnail = <span className="post-preview-thumbnail"><a href={post.url}><img src={post.thumbnail} alt="" /></a></span>;
+    }
+
+    if (post.url.match(/.png|.jpg|.jpeg|v.redd/)) {
+        image = <img src={post.url} alt="" />
+        thumbnail = null;
+    }
+
+    if (nsfw) {
+        image = <div className="nsfw-image"><img src={post.url} alt={post.title} /></div>
+        
+        if (thumbnail) {
+            thumbnail = <span className="post-preview-thumbnail nsfw-image"><a href={post.url}><img src={post.thumbnail} alt="" /></a></span>;
         }
-        var si = [
-          {v: 1E3, s: "K"},
-          {v: 1E6, s: "M"},
-          {v: 1E9, s: "B"},
-          {v: 1E12, s: "T"},
-          {v: 1E15, s: "P"},
-          {v: 1E18, s: "E"}
-          ];
-        var i;
-        for (i = si.length - 1; i > 0; i--) {
-            if (num >= si[i].v) {
-                break;
-            }
-        }
-        return (num / si[i].v).toFixed(2).replace(/\.0+$|(\.[0-9]*[1-9])0+$/, "$1") + si[i].s;
+        
+    }
+
+    if (post.domain.match(/i.red|v.redd/) || post.is_self) {
+        domain = null;
+    } else {
+        domain = <div className="domain">➥ {post.domain}</div>;
     }
 
     const bodyTextPreview = <span><ReactMarkdown>{post.selftext.substr(0, 275) + "..."}</ReactMarkdown></span>;
 
-    const scrollToTop = () => {
-        window.scroll({
-            top: 0,
-            bottom: 0,
-            behavior: "smooth"
-        })
-    }
-
     return (
         
         <div className="post-preview">
-
-            {image ? image : null}
-            {video ? video : null}
+            <div className="media">
+                {image ? image : null}
+                {video ? video : null}
+            </div>
+            
+            { post.stickied ? <div className="sticky">sticky</div> : null }
             
             <div className="post-title">
-                { thumbnail ? thumbnail : null }
-                { post.stickied ? <div className="sticky">sticky</div> : null }
-                { post.is_self ? <h2><ReactMarkdown>{post.title}</ReactMarkdown></h2> : <a href={post.url}><h2><ReactMarkdown>{post.title}</ReactMarkdown></h2></a> }
+                {thumbnail}
+                <div className="title-text">
+                    { post.is_self ? <h2><ReactMarkdown>{post.title}</ReactMarkdown></h2> : <a href={post.url}><h2><ReactMarkdown>{post.title}</ReactMarkdown></h2></a> }
+                    <div className="url-info">
+                        <Link to={`/r/${post.subreddit}/`} onClick={scrollToTop} >r/{post.subreddit}</Link>
+                        {domain}
+                    </div>
+                </div>
             </div>
 
-            <span className="subreddit">
-                <Link to={`/r/${post.subreddit}/`} onClick={scrollToTop} >{post.subreddit}</Link>
-            </span>
-
             <div className="post-body-preview">
-                { post.is_self ? null : <div className="domain">{post.domain}</div> }
-                <div className="body">{post.selftext ? bodyTextPreview : null}</div>
+                { post.selftext ? <div className="body">{bodyTextPreview}</div> : null }
                 <div className="comments-score">
                     <Link to={`/discussion/${post.id}`}>
-                        <h4>{intToString(post.num_comments)} comments</h4>
+                        <span>{intToString(post.num_comments)} comments</span>
                     </Link>
-                    <span className="score">{intToString(post.score)}</span>
+                    <span className="score">❤ {intToString(post.score)}</span>
                 </div>
             </div>
             

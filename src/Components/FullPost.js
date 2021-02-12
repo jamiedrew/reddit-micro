@@ -1,29 +1,27 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {GetComments} from '../Actions/GetComments'
 import _ from 'lodash';
 import {Comment} from "./Comment";
 import ReactPlayer from 'react-player';
 import ReactMarkdown from 'react-markdown';
+import {Redirect, Link} from 'react-router-dom';
+import './FullPost.css'
 
 export const FullPost = (props) => {
 
     const postID = props.match.params.post;
     const dispatch = useDispatch();
-
     let post, video, comments;
 
-    const fetchData = () => {
-        dispatch(GetComments(postID))
-    }
-
     useEffect(() => {
-        fetchData();
+        dispatch(GetComments(postID));
         window.scroll({
             top: 0,
             bottom: 0,
             behavior: "smooth"
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const postData = useSelector(store => store.Comments);
@@ -50,12 +48,19 @@ export const FullPost = (props) => {
 
             return (
                 <div className="full-post">
-                    {video ? video : null}
-                    { post.thumbnail ? <img src={post.url} alt="" /> : null }
+                    <div className="media">
+                        {video ? video : null}
+                        { post.thumbnail ? <img src={post.url} alt="" /> : null }
+                    </div>
+
                     { post.is_self ? <h1><ReactMarkdown>{post.title}</ReactMarkdown></h1> : <h1><a href={post.url}><ReactMarkdown>{post.title}</ReactMarkdown></a></h1> }
-                    { post.is_self ? null : <span className="post-link">{post.url}</span> }
-                    <h2>{post.author}</h2>
-                    <h3>{post.subreddit_name_prefixed}</h3>
+                    
+                    <div className="post-info">
+                        <div className="author">{post.author}</div>
+                        <Link to={`/r/${post.subreddit}`}><div className="subreddit">{post.subreddit_name_prefixed}</div></Link>
+                        { post.is_self ? null : <div className="post-link">{post.domain}</div> }
+                    </div>
+                    
                     <div className="body">
                         <ReactMarkdown>{post.selftext}</ReactMarkdown>
                     </div>
@@ -79,11 +84,11 @@ export const FullPost = (props) => {
     }
 
     if (postData.loading) {
-        return <p>loading...</p>
+        return <div className="loading">loading...</div>
     }
 
     if (postData.errorMsg !== ``) {
-        return <p>{postData.errorMsg}</p>
+        return <Redirect to="/404" />
     }
     
     return (
