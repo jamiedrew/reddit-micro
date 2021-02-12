@@ -160,6 +160,27 @@ h2 {
     font-weight: 800;
 }
 
+.searching {
+    margin: 5% auto;
+    text-align: center;
+}
+
+.search-results {
+    width: 66%;
+    margin: auto;
+}
+
+.search-post {
+    margin: 2%;
+    background-color: var(--white);
+    padding: 2%;
+    box-shadow: 0 1em 1em var(--shadow);
+}
+
+.search-post a {
+    color: var(--spacecadet);
+}
+
 .loading {
     width: 50%;
     margin: 25% auto;
